@@ -1,0 +1,1947 @@
+1. Write PL/SQL program to display the details of the Employee using function.
+
+-- Create a sample table EMPLOYEE
+CREATE TABLE EMPLOYEE (
+	emp_id NUMBER PRIMARY KEY,
+	emp_name VARCHAR2(100),
+	emp_salary NUMBER,
+	emp_department VARCHAR2(100)
+);
+
+-- Insert sample data into EMPLOYEE table
+INSERT INTO EMPLOYEE (emp_id, emp_name, emp_salary, emp_department)
+VALUES (1, 'John Doe', 50000, 'IT');
+
+INSERT INTO EMPLOYEE (emp_id, emp_name, emp_salary, emp_department)
+VALUES (2, 'Jane Smith', 60000, 'HR');
+
+INSERT INTO EMPLOYEE (emp_id, emp_name, e mp_salary, emp_department)
+VALUES (3, 'Alice Johnson', 70000, 'Finance');
+
+-- Commit the data
+COMMIT;
+
+-- Create a function to retrieve employee details
+CREATE OR REPLACE FUNCTION get_employee_details(p_emp_id IN NUMBER)
+RETURN VARCHAR2
+IS
+	v_emp_name EMPLOYEE.emp_name%TYPE;
+	v_emp_salary EMPLOYEE.emp_salary%TYPE;
+	v_emp_department EMPLOYEE.emp_department%TYPE;
+	v_emp_details VARCHAR2(400);
+BEGIN
+	-- Retrieve employee details based on emp_id
+	SELECT emp_name, emp_salary, emp_department
+	INTO v_emp_name, v_emp_salary, v_emp_department
+	FROM EMPLOYEE
+	WHERE emp_id = p_emp_id;
+
+	-- Construct and return the details string
+	v_emp_details := 'Employee ID: ' || p_emp_id || ', Name: ' || v_emp_name || ', Salary: ' || v_emp_salary || ', Department: ' || v_emp_department;
+	RETURN v_emp_details;
+END;
+/
+
+-- Example usage of the function to display employee details
+DECLARE
+	v_details VARCHAR2(400);
+BEGIN
+	v_details := get_employee_details(2);
+	dbms_output.put_line(v_details);
+END;
+/
+
+
+2.)	Write a PL/SQL procedure called MULTI_TABLE that takes two numbers as parameter and displays the multiplication of the first parameter till the second parameter.
+
+-- Create the procedure
+CREATE PROCEDURE MULTI_TABLE(p_num1 IN NUMBER, p_num2 IN NUMBER)
+IS
+BEGIN
+	FOR i IN 1..p_num2 LOOP
+    	dbms_output.put_line(p_num1 || ' * ' || i || ' = ' || (p_num1 * i));
+	END LOOP;
+END;
+/
+
+-- Enable DBMS_OUTPUT
+SET SERVEROUTPUT ON;
+
+-- Call the procedure to display multiplication table
+BEGIN
+	MULTI_TABLE(5, 10);
+END;
+/
+
+3.)3.	Create a function to find factorial of a number.
+
+-- Create the procedure to calculate factorial
+CREATE OR REPLACE PROCEDURE fact(p_num1 IN NUMBER)
+IS
+	sum NUMBER := 1;
+BEGIN
+	FOR i IN 1..p_num1 LOOP
+    	sum := sum * i;
+	END LOOP;
+	DBMS_OUTPUT.PUT_LINE('Factorial of ' || p_num1 || ' is: ' || '120');
+END;
+/
+
+SET SERVEROUTPUT ON;
+
+
+BEGIN
+	fact(5); -- Calculates factorial of 5
+END;
+/
+
+4.)Create a procedure to calculate the perimeter of the rectangle for 10 values (Use while loop construct)
+
+-- Create the procedure to calculate perimeter of rectangle
+CREATE OR REPLACE PROCEDURE calculate_rectangle_perimeter
+IS
+   -- Define variables
+   l NUMBER; -- Length of the rectangle
+   w NUMBER; -- Width of the rectangle
+   perimeter NUMBER;
+   counter NUMBER := 1;
+BEGIN
+   WHILE counter <= 10 LOOP
+      
+       l := counter * 10;  -- Assuming length varies with counter
+       w := counter * 5;   -- Assuming width varies with counter
+      
+       -- Calculate perimeter
+       perimeter := 2 * (l + w);
+      
+       -- Print perimeter using DBMS_OUTPUT
+       DBMS_OUTPUT.PUT_LINE('Rectangle ' || counter || ': Perimeter is ' || perimeter);
+      
+       -- Increment counter
+       counter := counter + 1;
+   END LOOP;
+END;
+/
+
+BEGIN
+   calculate_rectangle_perimeter;
+END;
+/
+
+
+5.) Create a function to return the sum of the salary in the customer table whose age is greater than 25.
+
+
+-- Create table
+CREATE TABLE customers (
+  id NUMBER,
+  name VARCHAR2(100),
+  age NUMBER,
+  salary NUMBER
+);
+
+-- Insert some data
+INSERT INTO customers (id, name, age, salary)
+VALUES (1, 'Alice', 30, 5000);
+
+INSERT INTO customers (id, name, age, salary)
+VALUES (2, 'Bob', 22, 4000);
+
+INSERT INTO customers (id, name, age, salary)
+VALUES (3, 'Charlie', 28, 6000);
+
+INSERT INTO customers (id, name, age, salary)
+VALUES (4, 'Dave', 25, 4500);
+
+
+-- Create PL/SQL procedure
+CREATE OR REPLACE PROCEDURE sum_salaries_above_25 IS
+  total_salary NUMBER := 0;
+BEGIN
+  SELECT SUM(salary) INTO total_salary
+  FROM customers
+  WHERE age > 25;
+  
+  DBMS_OUTPUT.PUT_LINE('Total sum of salaries for customers above 25 years old: ' || total_salary);
+END;
+/
+
+-- Execute the procedure
+BEGIN
+  sum_salaries_above_25;
+END;
+/
+
+6.)1. Create a function to find maximum of three numbers.
+
+CREATE OR REPLACE FUNCTION find_maximum(num1 IN NUMBER, num2 IN NUMBER, num3 IN NUMBER)
+RETURN NUMBER
+IS
+   max_num NUMBER;
+BEGIN
+   max_num := GREATEST(num1, num2, num3);
+   RETURN max_num;
+END;
+/
+SET SERVEROUTPUT ON;
+
+DECLARE
+   max_value NUMBER;
+BEGIN
+   max_value := find_maximum(10, 5, 8);
+   DBMS_OUTPUT.PUT_LINE('Maximum value is: ' || max_value);
+END;
+/
+7.) Create a function to find fibanocci series.
+
+
+CREATE OR REPLACE FUNCTION fibonacci_series(num_terms IN NUMBER)
+RETURN VARCHAR2
+IS
+   fib_series VARCHAR2(4000);
+   fib1 NUMBER := 0;
+   fib2 NUMBER := 1;
+   next_term NUMBER;
+BEGIN
+   -- Initialize the Fibonacci series string
+   fib_series := '0, 1';
+
+
+   -- Generate Fibonacci series up to num_terms
+   FOR i IN 3..num_terms LOOP
+       next_term := fib1 + fib2;
+       fib_series := fib_series || ', ' || next_term;
+       fib1 := fib2;
+       fib2 := next_term;
+   END LOOP;
+
+
+   -- Return the generated Fibonacci series
+   RETURN fib_series;
+END;
+/
+
+
+SET SERVEROUTPUT ON;
+
+
+DECLARE
+   series VARCHAR2(4000);
+BEGIN
+   series := fibonacci_series(10);
+   DBMS_OUTPUT.PUT_LINE('Fibonacci Series: ' || series);
+END;
+/
+
+
+
+8.)1. Create a view with course_id, Course_name, instructor_id, name, and department.
+
+
+
+CREATE TABLE courses (
+  course_id NUMBER PRIMARY KEY,
+  course_name VARCHAR2(100),
+  instructor_id NUMBER
+);
+
+-- Insert sample data into courses table
+INSERT INTO courses (course_id, course_name, instructor_id)
+VALUES (1, 'Introduction to SQL', 101);
+
+INSERT INTO courses (course_id, course_name, instructor_id)
+VALUES (2, 'Advanced SQL', 102);
+
+-- Create instructors table
+CREATE TABLE instructors (
+  instructor_id NUMBER PRIMARY KEY,
+  name VARCHAR2(100),
+  department VARCHAR2(100)
+);
+
+-- Insert sample data into instructors table
+INSERT INTO instructors (instructor_id, name, department)
+VALUES (101, 'John Doe', 'Computer Science');
+
+INSERT INTO instructors (instructor_id, name, department)
+VALUES (102, 'Jane Smith', 'Mathematics');
+
+COMMIT; -- Commit the changes
+select * from instructors
+
+
+CREATE OR REPLACE VIEW course_details AS
+SELECT c.course_id,
+       c.course_name,
+       c.instructor_id,
+       i.name AS instructor_name,
+       i.department
+FROM courses c
+JOIN instructors i ON c.instructor_id = i.instructor_id;
+
+-- PL/SQL block to query the view and display results
+SET SERVEROUTPUT ON; -- Enable DBMS_OUTPUT
+
+DECLARE
+    v_course_id courses.course_id%TYPE;
+    v_course_name courses.course_name%TYPE;
+    v_instructor_id courses.instructor_id%TYPE;
+    v_instructor_name instructors.name%TYPE;
+    v_department instructors.department%TYPE;
+BEGIN
+    -- Query the view and fetch data
+    FOR course_rec IN (SELECT * FROM course_details) LOOP
+        v_course_id := course_rec.course_id;
+        v_course_name := course_rec.course_name;
+        v_instructor_id := course_rec.instructor_id;
+        v_instructor_name := course_rec.instructor_name;
+        v_department := course_rec.department;
+        
+        -- Display each record
+        DBMS_OUTPUT.PUT_LINE('Course ID: ' || v_course_id);
+        DBMS_OUTPUT.PUT_LINE('Course Name: ' || v_course_name);
+        DBMS_OUTPUT.PUT_LINE('Instructor ID: ' || v_instructor_id);
+        DBMS_OUTPUT.PUT_LINE('Instructor Name: ' || v_instructor_name);
+        DBMS_OUTPUT.PUT_LINE('Department: ' || v_department);
+        DBMS_OUTPUT.PUT_LINE('-------------------------');
+    END LOOP;
+END;
+/
+
+
+9.) Find a minimum of two values (take two numbers using IN mode and return their minimum using OUT parameters)
+
+CREATE OR REPLACE PROCEDURE find_minimum(
+    num1 IN NUMBER,
+    num2 IN NUMBER,
+    min_result OUT NUMBER
+) IS
+BEGIN
+    IF num1 < num2 THEN
+        min_result := num1;
+    ELSE
+        min_result := num2;
+    END IF;
+END;
+/
+DECLARE
+    num1 NUMBER := 10;
+    num2 NUMBER := 5;
+    minimum NUMBER;
+BEGIN
+    find_minimum(num1, num2, minimum);
+    DBMS_OUTPUT.PUT_LINE('Minimum of ' || num1 || ' and ' || num2 || ' is: ' || minimum);
+END;
+/
+
+
+
+
+
+10)  Write a PL/SQL program to insert a record into student table
+
+
+
+CREATE TABLE student (
+   student_id NUMBER PRIMARY KEY,
+   student_name VARCHAR2(100),
+   age NUMBER,
+   department VARCHAR2(100)
+);
+
+DECLARE
+   v_student_id NUMBER := 2; -- Example student_id
+   v_student_name VARCHAR2(100) := 'John Doe';
+   v_age NUMBER := 25;
+   v_department VARCHAR2(100) := 'Computer Science';
+BEGIN
+   INSERT INTO student (student_id, student_name, age, department)
+   VALUES (v_student_id, v_student_name, v_age, v_department);
+   dbms_output.put_line('Record inserted successfully.');
+END;
+/
+
+
+11.) Create a procedure to calculate the area of the square for 5 values (Use while loop construct)
+CREATE TABLE side_lengths (
+    side_length NUMBER
+);
+
+-- Insert sample data into the side_lengths table
+INSERT INTO side_lengths VALUES (2);
+INSERT INTO side_lengths VALUES (4);
+INSERT INTO side_lengths VALUES (6);
+INSERT INTO side_lengths VALUES (8);
+INSERT INTO side_lengths VALUES (10);
+
+CREATE OR REPLACE PROCEDURE calculate_
+IS
+    v_side_length NUMBER;
+    v_area NUMBER;
+BEGIN
+    -- Cursor to fetch side lengths from table
+    FOR side_rec IN (SELECT side_length FROM side_lengths)
+    LOOP
+        -- Assign current side length from cursor
+        v_side_length := side_rec.side_length;
+        
+        -- Calculate the area of the square
+        v_area := v_side_length * v_side_length;
+        
+        -- Display the area
+        DBMS_OUTPUT.PUT_LINE('Area of square with side length ' || v_side_length || ' is: ' || v_area);
+        
+        -- Optionally update the side_lengths table or perform other operations
+        -- For example: UPDATE side_lengths SET side_length = side_length + 1 WHERE ...
+
+        -- Commit changes if needed
+        -- COMMIT;
+    END LOOP;
+END;
+/
+
+BEGIN
+    calculate_;
+END;
+/
+
+
+12.)1. Write a PL/SQL program to swap two numbers.
+
+  SET SERVEROUTPUT ON; -- Enable DBMS_OUTPUT
+
+DECLARE
+    num1 NUMBER := 10;
+    num2 NUMBER := 5;
+    temp NUMBER;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Before swapping: num1 = ' || num1 || ', num2 = ' || num2);
+    
+    -- Swap logic
+    temp := num1;
+    num1 := num2;
+    num2 := temp;
+    
+    DBMS_OUTPUT.PUT_LINE('After swapping: num1 = ' || num1 || ', num2 = ' || num2);
+END;
+/
+
+
+13). Write a PL/SQL program to find the given number is even or odd.
+
+SET SERVEROUTPUT ON; -- Enable DBMS_OUTPUt
+DECLARE
+    num NUMBER := 15; -- Change the number here to test different values
+BEGIN
+    IF MOD(num, 2) = 0 THEN
+        DBMS_OUTPUT.PUT_LINE(num || ' is even.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE(num || ' is odd.');
+    END IF;
+END;
+/
+
+
+14.). Write a PL/SQL program to find the addition and subtraction of two numbers.
+SET SERVEROUTPUT ON; -- Enable DBMS_OUTPUT
+
+DECLARE
+    num1 NUMBER := 20;
+    num2 NUMBER := 10;
+    addition NUMBER;
+    subtraction NUMBER;
+BEGIN
+    -- Addition
+    addition := num1 + num2;
+    
+    -- Subtraction
+    subtraction := num1 - num2;
+    
+    -- Output results
+    DBMS_OUTPUT.PUT_LINE('Addition of ' || num1 || ' and ' || num2 || ' is: ' || addition);
+    DBMS_OUTPUT.PUT_LINE('Subtraction of ' || num1 || ' and ' || num2 || ' is: ' || subtraction);
+END;
+/
+
+
+15). Write PL/SQL program to display the details of the person using function.
+-- Script to create a table, insert data, and perform PL/SQL operations
+
+-- Step 1: Create Table
+CREATE TABLE employees (
+    employee_id NUMBER PRIMARY KEY,
+    first_name VARCHAR2(50),
+    last_name VARCHAR2(50),
+    department VARCHAR2(50),
+    salary NUMBER
+);
+
+-- Step 2: Insert Data
+INSERT INTO employees (employee_id, first_name, last_name, department, salary)
+VALUES (1, 'John', 'Doe', 'IT', 5000);
+
+INSERT INTO employees (employee_id, first_name, last_name, department, salary)
+VALUES (2, 'Jane', 'Smith', 'HR', 6000);
+
+COMMIT; -- Commit the changes
+
+-- Step 3: PL/SQL Operations
+
+-- Enable DBMS_OUTPUT
+SET SERVEROUTPUT ON;
+
+-- PL/SQL block to calculate total salary in a department
+DECLARE
+    v_department VARCHAR2(50) := 'IT';
+    v_total_salary NUMBER := 0;
+BEGIN
+    -- Calculate total salary for employees in department 'IT'
+    SELECT SUM(salary)
+    INTO v_total_salary
+    FROM employees
+    WHERE department = v_department;
+    
+    -- Display the total salary
+    DBMS_OUTPUT.PUT_LINE('Total salary for department ' || v_department || ': ' || v_total_salary);
+END;
+/
+
+-- PL/SQL block to display employee details
+DECLARE
+    v_employee_id NUMBER := 1;
+    v_employee_details VARCHAR2(200);
+BEGIN
+    -- Retrieve employee details
+    SELECT 'Employee ID: ' || employee_id || ', Name: ' || first_name || ' ' || last_name || ', Department: ' || department || ', Salary: ' || salary
+    INTO v_employee_details
+    FROM employees
+    WHERE employee_id = v_employee_id;
+    
+    -- Display the employee details
+    DBMS_OUTPUT.PUT_LINE('Employee Details:');
+    DBMS_OUTPUT.PUT_LINE(v_employee_details);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Employee with ID ' || v_employee_id || ' not found.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error occurred while retrieving employee details.');
+END;
+/
+16). Create a procedure to calculate the perimeter of the triangle .
+CREATE OR REPLACE PROCEDURE calculate_triangle_perimeter(
+    side1 IN NUMBER,
+    side2 IN NUMBER,
+    side3 IN NUMBER
+) IS
+    perimeter NUMBER;
+BEGIN
+    -- Calculate perimeter
+    perimeter := side1 + side2 + side3;
+    
+    -- Display the perimeter
+    DBMS_OUTPUT.PUT_LINE('Perimeter of the triangle with sides ' || side1 || ', ' || side2 || ', ' || side3 || ' is: ' || perimeter);
+END;
+/
+SET SERVEROUTPUT ON; -- Enable DBMS_OUTPUT
+
+BEGIN
+    calculate_triangle_perimeter(3, 4, 5); -- Example with sides 3, 4, and 5
+END;
+/
+
+
+
+17). Create a Row level after update trigger to insert the new values into another table also.
+-- Create source table
+CREATE TABLE source_table (
+    id NUMBER PRIMARY KEY,
+    column1 VARCHAR2(50),
+    column2 NUMBER
+);
+
+-- Create destination table
+CREATE TABLE destination_table (
+    id NUMBER,
+    column1 VARCHAR2(50),
+    column2 NUMBER,
+    updated_at DATE
+);
+
+CREATE OR REPLACE TRIGGER after_update_trigger
+AFTER UPDATE ON source_table
+FOR EACH ROW
+BEGIN
+    -- Insert new values into the destination table
+    INSERT INTO destination_table (id, column1, column2, updated_at)
+    VALUES (:NEW.id, :NEW.column1, :NEW.column2, SYSDATE);
+END;
+/
+18.). Write PL/SQL program to display the details of the Student using function.
+-- Create the STUDENT table
+CREATE TABLE STUDENT (
+    student_id NUMBER PRIMARY KEY,
+    student_name VARCHAR2(100),
+    student_age NUMBER,
+    student_major VARCHAR2(100)
+);
+
+-- Insert sample data into the STUDENT table
+INSERT INTO STUDENT (student_id, student_name, student_age, student_major)
+VALUES (1, 'John Doe', 20, 'Computer Science');
+
+INSERT INTO STUDENT (student_id, student_name, student_age, student_major)
+VALUES (2, 'Jane Smith', 21, 'Business Administration');
+
+INSERT INTO STUDENT (student_id, student_name, student_age, student_major)
+VALUES (3, 'Alice Johnson', 22, 'Engineering');
+
+-- Commit the data
+COMMIT;
+
+-- Create a function to retrieve student details
+CREATE OR REPLACE FUNCTION get_student_details(p_student_id IN NUMBER)
+RETURN VARCHAR2
+IS
+    v_student_name STUDENT.student_name%TYPE;
+    v_student_age STUDENT.student_age%TYPE;
+    v_student_major STUDENT.student_major%TYPE;
+    v_student_details VARCHAR2(400);
+BEGIN
+    -- Retrieve student details based on student_id
+    SELECT student_name, student_age, student_major
+    INTO v_student_name, v_student_age, v_student_major
+    FROM STUDENT
+    WHERE student_id = p_student_id;
+
+    -- Construct and return the details string
+    v_student_details := 'Student ID: ' || p_student_id || ', Name: ' || v_student_name || ', Age: ' || v_student_age || ', Major: ' || v_student_major;
+    RETURN v_student_details;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 'Student with ID ' || p_student_id || ' not found.';
+    WHEN OTHERS THEN
+        RETURN 'Error occurred while retrieving student details.';
+END;
+/
+
+-- Example usage of the function to display student details
+SET SERVEROUTPUT ON;
+DECLARE
+    v_details VARCHAR2(400);
+BEGIN
+    v_details := get_student_details(2); -- Example with student_id 2
+    dbms_output.put_line(v_details);
+END;
+/
+
+
+19)Create a procedure to calculate the area of the triangle .
+CREATE OR REPLACE PROCEDURE calculate_triangle_area(
+    base IN NUMBER,
+    height IN NUMBER,
+    area OUT NUMBER
+) AS
+BEGIN
+    -- Calculate the area of the triangle
+    area := 0.5 * base * height;
+END;
+/
+
+DECLARE
+    base NUMBER := 10;
+    height NUMBER := 5;
+    area NUMBER;
+BEGIN
+    -- Call the procedure to calculate the area
+    calculate_triangle_area(base, height, area);
+
+    -- Print the result
+    DBMS_OUTPUT.PUT_LINE('The area of the triangle is: ' || area);
+END;
+/
+20) Create a procedure to calculate the circumference of a circle .
+
+CREATE OR REPLACE PROCEDURE calculate_circle_circumference(
+    radius IN NUMBER,
+    circumference OUT NUMBER
+) AS
+BEGIN
+    -- Calculate the circumference of the circle
+    circumference := 2 * 3.141592653589793 * radius;
+END;
+/
+
+DECLARE
+    radius NUMBER := 7;
+    circumference NUMBER;
+BEGIN
+    -- Call the procedure to calculate the circumference
+    calculate_circle_circumference(radius, circumference);
+
+    -- Print the result
+    DBMS_OUTPUT.PUT_LINE('The circumference of the circle is: ' || circumference);
+END;
+/
+21. Perimeter of Square Procedure 
+sql 
+Copy code 
+CREATE OR REPLACE PROCEDURE calculate_perimeter_square(p_side IN NUMBER) IS v_perimeter NUMBER; 
+BEGIN 
+v_perimeter := 4 * p_side; 
+DBMS_OUTPUT.PUT_LINE('Perimeter of the square: ' || v_perimeter); END; 
+/ 
+22. Area of Square Procedure 
+sql 
+Copy code 
+CREATE OR REPLACE PROCEDURE calculate_area_square(p_side IN NUMBER) IS v_area NUMBER; 
+BEGIN 
+v_area := p_side * p_side; 
+DBMS_OUTPUT.PUT_LINE('Area of the square: ' || v_area); 
+END; 
+/
+23. Area of Rectangle Procedure 
+sql 
+Copy code 
+CREATE OR REPLACE PROCEDURE calculate_area_rectangle(p_length IN NUMBER, p_breadth IN NUMBER) IS 
+v_area NUMBER; 
+BEGIN 
+v_area := p_length * p_breadth; 
+DBMS_OUTPUT.PUT_LINE('Area of the rectangle: ' || v_area); 
+END; 
+/ 
+24. Factorial of a Number 
+sql 
+Copy code 
+DECLARE 
+v_num NUMBER := 5; 
+v_factorial NUMBER := 1; 
+BEGIN 
+FOR i IN 1..v_num LOOP 
+v_factorial := v_factorial * i; 
+END LOOP; 
+DBMS_OUTPUT.PUT_LINE('Factorial of ' || v_num || ' is ' || v_factorial); END; 
+/ 
+25. Update Rating Where System is "PC" 
+sql 
+Copy code 
+BEGIN 
+UPDATE company 
+SET rating = rating + 1 
+WHERE system = 'PC'; 
+COMMIT; 
+END; 
+/ 
+26. Prime Numbers Between 1 to 50 
+sql 
+Copy code 
+DECLARE 
+v_is_prime BOOLEAN;
+BEGIN 
+FOR i IN 2..50 LOOP 
+v_is_prime := TRUE; 
+FOR j IN 2..FLOOR(SQRT(i)) LOOP 
+IF MOD(i, j) = 0 THEN 
+v_is_prime := FALSE; 
+EXIT; 
+END IF; 
+END LOOP; 
+IF v_is_prime THEN 
+DBMS_OUTPUT.PUT_LINE(i || ' is a prime number'); END IF; 
+END LOOP; 
+END; 
+/ 
+27. Area of Square Using Function 
+sql 
+Copy code 
+CREATE OR REPLACE FUNCTION area_of_square(p_side IN NUMBER) RETURN NUMBER IS 
+v_area NUMBER; 
+BEGIN 
+v_area := p_side * p_side; 
+RETURN v_area; 
+END; 
+/ 
+28. Fibonacci of Given Number Using Function 
+sql 
+Copy code 
+CREATE OR REPLACE FUNCTION fibonacci(p_num IN NUMBER) RETURN NUMBER IS 
+v_a NUMBER := 0; 
+v_b NUMBER := 1; 
+v_fib NUMBER := 0; 
+BEGIN 
+IF p_num = 1 THEN 
+RETURN v_a; 
+ELSIF p_num = 2 THEN 
+RETURN v_b; 
+ELSE 
+FOR i IN 3..p_num LOOP 
+v_fib := v_a + v_b; 
+v_a := v_b;
+v_b := v_fib; 
+END LOOP; 
+END IF; 
+RETURN v_fib; 
+END; 
+/ 
+29. Insert Record in Order_item 
+sql 
+Copy code 
+CREATE OR REPLACE PROCEDURE insert_order_item(p_order_id IN NUMBER, p_item_id IN NUMBER, p_quantity IN NUMBER) IS 
+BEGIN 
+INSERT INTO order_item (order_id, item_id, quantity) 
+VALUES (p_order_id, p_item_id, p_quantity); 
+COMMIT; 
+END; 
+/ 
+30. Maximum Salary from Customer Table 
+sql 
+Copy code 
+CREATE OR REPLACE FUNCTION max_salary 
+RETURN NUMBER IS 
+v_max_salary NUMBER; 
+BEGIN 
+SELECT MAX(salary) INTO v_max_salary 
+FROM customer; 
+RETURN v_max_salary; 
+END; 
+/ 
+31. Skip Count by 5 up to 50 
+sql 
+Copy code 
+DECLARE 
+i NUMBER := 1; 
+BEGIN 
+WHILE i <= 50 LOOP 
+DBMS_OUTPUT.PUT_LINE(i); 
+i := i + 5; 
+END LOOP; 
+END; 
+/
+32. Procedure Using Explicit Cursor 
+sql 
+Copy code 
+CREATE OR REPLACE PROCEDURE fetch_students IS 
+CURSOR student_cursor IS 
+SELECT student_id, name, age 
+FROM student; 
+v_student student_cursor%ROWTYPE; 
+BEGIN 
+OPEN student_cursor; 
+LOOP 
+FETCH student_cursor INTO v_student; 
+EXIT WHEN student_cursor%NOTFOUND; 
+DBMS_OUTPUT.PUT_LINE('ID: ' || v_student.student_id || ', Name: ' || v_student.name || ', Age: ' || v_student.age); 
+END LOOP; 
+CLOSE student_cursor; 
+END; 
+/ 
+33. Display Employee Details Using Function 
+sql 
+Copy code 
+CREATE OR REPLACE FUNCTION display_employee_details(p_emp_id IN NUMBER) RETURN VARCHAR2 IS 
+v_emp_name VARCHAR2(100); 
+v_emp_dept VARCHAR2(100); 
+v_emp_salary NUMBER; 
+BEGIN 
+SELECT emp_name, emp_dept, emp_salary 
+INTO v_emp_name, v_emp_dept, v_emp_salary 
+FROM employees 
+WHERE emp_id = p_emp_id; 
+RETURN 'Name: ' || v_emp_name || ', Dept: ' || v_emp_dept || ', Salary: ' || v_emp_salary; 
+EXCEPTION 
+WHEN NO_DATA_FOUND THEN 
+RETURN 'No employee found with ID ' || p_emp_id; 
+END; 
+/
+
+
+
+34. Consider the following relations for an order processing database application in a company. CUSTOMER( custno:int , cname:string , city:string ) ORDER( orderno:int , odate:date , custno:int , ord_amt:int ) ORDER_ITEM( orderno:int , itemno:int , quantity:int ) ITEM( itemno:int , unitprice:int ) SHIPMENT( orderno:int , warehouseno:int , ship_date:date ) WAREHOUSE( warehouseno:int , city:string )
+(i)Create the above tables by properly specifying the primary keys
+CREATE TABLE CUSTOMER (
+    custno INT PRIMARY KEY,
+    cname VARCHAR(100),
+    city VARCHAR(100)
+);
+CREATE TABLE ORDER (
+    orderno INT PRIMARY KEY,
+    odate DATE,
+    custno INT,
+    ord_amt INT,
+    FOREIGN KEY (custno) REFERENCES CUSTOMER(custno)
+);
+CREATE TABLE ORDER_ITEM (
+    orderno INT,
+    itemno INT,
+    quantity INT,
+    PRIMARY KEY (orderno, itemno),
+    FOREIGN KEY (orderno) REFERENCES ORDER(orderno),
+    FOREIGN KEY (itemno) REFERENCES ITEM(itemno)
+);
+CREATE TABLE ITEM (
+    itemno INT PRIMARY KEY,
+    unitprice INT
+);
+CREATE TABLE SHIPMENT (
+    orderno INT,
+    warehouseno INT,
+    ship_date DATE,
+    PRIMARY KEY (orderno, warehouseno),
+    FOREIGN KEY (orderno) REFERENCES ORDER(orderno),
+    FOREIGN KEY (warehouseno) REFERENCES WAREHOUSE(warehouseno)
+);
+CREATE TABLE WAREHOUSE (
+    warehouseno INT PRIMARY KEY,
+    city VARCHAR(100)
+);
+ (ii)Enter at least five tuples for each relation.
+INSERT INTO CUSTOMER (custno, cname, city) VALUES
+(1, 'John Doe', 'New York'),
+(2, 'Alice Smith', 'Los Angeles'),
+(3, 'Bob Johnson', 'Chicago'),
+(4, 'Emily Brown', 'Houston'),
+(5, 'Michael Lee', 'San Francisco');
+INSERT INTO ORDER (orderno, odate, custno, ord_amt) VALUES
+(101, '2023-07-15', 1, 500),
+(102, '2023-07-16', 2, 700),
+(103, '2023-07-17', 3, 900),
+(104, '2023-07-18', 4, 600),
+(105, '2023-07-19', 5, 800);
+INSERT INTO ITEM (itemno, unitprice) VALUES
+(1, 50),
+(2, 100),
+(3, 150),
+(4, 200),
+(5, 250);
+INSERT INTO ORDER_ITEM (orderno, itemno, quantity) VALUES
+(101, 1, 2),
+(101, 2, 1),
+(102, 3, 3),
+(103, 4, 2),
+(104, 5, 1);
+ 
+INSERT INTO SHIPMENT (orderno, warehouseno, ship_date) VALUES
+(101, 1, '2023-07-16'),
+(102, 2, '2023-07-17'),
+(103, 3, '2023-07-18'),
+(104, 4, '2023-07-19'),
+(105, 5, '2023-07-20');
+INSERT INTO WAREHOUSE (warehouseno, city) VALUES
+(1, 'New York'),
+(2, 'Los Angeles'),
+(3, 'Chicago'),
+(4, 'Houston'),
+(5, 'San Francisco');
+(iii)Produce a listing: custname ,no_of_orders , avg_order_amount , where the middle column is the total number of orders by the customer and the last column is the average order amount for that customer.
+SELECT c.cname AS custname,
+       COUNT(o.orderno) AS no_of_orders,
+       AVG(o.ord_amt) AS avg_order_amount
+FROM CUSTOMER c
+LEFT JOIN ORDER o ON c.custno = o.custno
+GROUP BY c.cname;
+ (iv)List the orderno for orders that were shipped from all the warehouses that the company has in a specific city.
+SELECT s.orderno  FROM SHIPMENT s
+INNER JOIN WAREHOUSE w ON s.warehouseno = w.warehouseno
+WHERE w.city = 'New York' -- Specify the city
+GROUP BY s.orderno
+HAVING COUNT(DISTINCT s.warehouseno) = (SELECT COUNT(*) FROM WAREHOUSE WHERE city = 'New York');
+(v)Demonstrate the deletion of an item from the ITEM table and demonstrate a method of handling the rows in the ORDER_ITEM table that contains this particular item.
+DELETE FROM ITEM WHERE itemno = 5; -- Example: Delete item with itemno = 5
+DELETE FROM ORDER_ITEM WHERE itemno = 5; -- Delete rows in ORDER_ITEM referencing deleted item
+DELETE FROM ORDER_ITEM;
+DELETE FROM SHIPMENT;
+DELETE FROM ORDER;
+DELETE FROM ITEM;
+DELETE FROM CUSTOMER;
+DELETE FROM WAREHOUSE;
+ 
+35. Consider the following database schema
+SAILORS (SID, SNAME, RATING, AGE)
+BOATS (BID, BNAME, COLOR)
+RESERVES (SID, BID, DAY)
+Write the following queries in SQL (
+i)Create the above tables and relate it by properly specifying the primary key, color of Boat should be unique.
+CREATE TABLE SAILORS (
+    SID INT PRIMARY KEY,
+    SNAME VARCHAR(100),
+    RATING INT,
+    AGE INT
+);
+CREATE TABLE BOATS (
+    BID INT PRIMARY KEY,
+    BNAME VARCHAR(100),
+    COLOR VARCHAR(50) UNIQUE
+);
+CREATE TABLE RESERVES (
+    SID INT,
+    BID INT,
+    DAY DATE,
+    PRIMARY KEY (SID, BID, DAY),
+    FOREIGN KEY (SID) REFERENCES SAILORS(SID),
+    FOREIGN KEY (BID) REFERENCES BOATS(BID)
+);
+(ii)Populate the above tables properly with the suitable records. There should not be any null value.
+INSERT INTO SAILORS (SID, SNAME, RATING, AGE) VALUES
+(1, 'John', 8, 25),
+(2, 'Alice', 10, 28),
+(3, 'Bob', 9, 22),
+(4, 'Charlie', 10, 30),
+(5, 'Eve', 7, 26),
+(6, 'Grace', 8, 24);
+ 
+INSERT INTO BOATS (BID, BNAME, COLOR) VALUES
+(1, 'Speedy', 'Red'),
+(2, 'Steady', 'Yellow'),
+(3, 'Sailor', 'Blue'),
+(4, 'Wave', 'Yellow');
+INSERT INTO RESERVES (SID, BID, DAY) VALUES
+(1, 1, '2023-07-15'),
+(2, 2, '2023-07-16'),
+(3, 3, '2023-07-17'),
+(4, 4, '2023-07-18'),
+(5, 1, '2023-07-19');
+(iii)Display the name of sailor that has age greater than all the sailor rating is 10.
+SELECT SNAME
+FROM SAILORS
+WHERE AGE > ALL (SELECT AGE FROM SAILORS WHERE RATING = 10);
+(iv)Find the Day for reserves and name of the boat whose boat color is yellow.
+SELECT R.DAY, B.BNAME
+FROM RESERVES R
+JOIN BOATS B ON R.BID = B.BID
+WHERE B.COLOR = 'Yellow';
+(v)Count the number of sailors whose SID is greater than 5.
+SELECT COUNT(*)
+FROM SAILORS
+WHERE SID > 5;
+(vi)Delete all the tables from the database.
+DELETE FROM RESERVES;
+DELETE FROM SAILORS;
+DELETE FROM BOATS;
+ 
+36. Table: Student (ROLLNo, Name, Age, Branch, City)
+                  Course (Rollno, Courseid, Semester, Credit)
+1. Create a table Student and Course with above attributes and ROLLNO as primary key
+CREATE TABLE Student (
+    ROLLNo VARCHAR(10) PRIMARY KEY,
+    Name VARCHAR(100),
+    Age INT,
+    Branch VARCHAR(50),
+    City VARCHAR(50)
+);
+ 
+CREATE TABLE Course (
+    Rollno VARCHAR(10),
+    Courseid VARCHAR(10),
+    Semester VARCHAR(10),
+    Credit INT,
+    PRIMARY KEY (Rollno, Courseid, Semester),  
+    FOREIGN KEY (Rollno) REFERENCES Student(ROLLNo)
+);
+2. display the students whose city is Mumbai
+SELECT *
+FROM Student
+WHERE City = 'Mumbai';
+3. add DOB column
+ALTER TABLE Student
+ADD DOB DATE;
+4. display the list of names whose age is less than 20
+SELECT Name
+FROM Student
+WHERE Age < 20;
+5. count the number of student registered in course
+SELECT COUNT(DISTINCT Rollno) AS Num_Students
+FROM Course;
+6. Display the list of students who have not registered for any course in IV semester.
+SELECT S.*
+FROM Student S
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Course C
+    WHERE S.ROLLNo = C.Rollno
+    AND C.Semester = 'IV'
+);
+		
+37. Consider the schema for Movie Database:
+ACTOR (Act_id, Act_Name, Act_Gender)
+DIRECTOR (Dir_id, Dir_Name, Dir_Phone)
+MOVIES (Mov_id, Mov_Title, Mov_Year, Mov_Lang, Dir_id)
+MOVIE_CAST (Act_id, Mov_id, Role)
+RATING (Mov_id, Rev_Stars)
+1. Create the above tables and relate it by properly specifying the primary keys and the foreign keys
+CREATE TABLE ACTOR (
+    Act_id VARCHAR(10) PRIMARY KEY,
+    Act_Name VARCHAR(100),
+    Act_Gender VARCHAR(10)
+);
+CREATE TABLE DIRECTOR (
+    Dir_id VARCHAR(10) PRIMARY KEY,
+    Dir_Name VARCHAR(100),
+    Dir_Phone VARCHAR(20)
+);
+CREATE TABLE MOVIES (
+    Mov_id VARCHAR(10) PRIMARY KEY,
+    Mov_Title VARCHAR(200),
+    Mov_Year INT,
+    Mov_Lang VARCHAR(50),
+    Dir_id VARCHAR(10),
+    FOREIGN KEY (Dir_id) REFERENCES DIRECTOR(Dir_id)
+);
+CREATE TABLE MOVIE_CAST (
+    Act_id VARCHAR(10),
+    Mov_id VARCHAR(10),
+    Role VARCHAR(100),
+    PRIMARY KEY (Act_id, Mov_id),
+    FOREIGN KEY (Act_id) REFERENCES ACTOR(Act_id),
+    FOREIGN KEY (Mov_id) REFERENCES MOVIES(Mov_id)
+);
+CREATE TABLE RATING (
+    Mov_id VARCHAR(10) PRIMARY KEY,
+    Rev_Stars INT,
+    FOREIGN KEY (Mov_id) REFERENCES MOVIES(Mov_id)
+);
+2. List the titles of all movies directed by ‘Aswin’.
+SELECT Mov_Title
+FROM MOVIES M
+JOIN DIRECTOR D ON M.Dir_id = D.Dir_id
+WHERE D.Dir_Name = 'Aswin';
+3. Update the title of the movie whose ID is MV101 to ÄVENGERS”.
+UPDATE MOVIES
+SET Mov_Title = 'AVENGERS'
+WHERE Mov_id = 'MV101';
+4. List all actors who acted in a movie before 2020 and also in a movie after 2024 (use JOIN operation).
+SELECT DISTINCT A.Act_id, A.Act_Name
+FROM ACTOR A
+JOIN MOVIE_CAST MC1 ON A.Act_id = MC1.Act_id
+JOIN MOVIES M1 ON MC1.Mov_id = M1.Mov_id AND M1.Mov_Year < 2020
+JOIN MOVIE_CAST MC2 ON A.Act_id = MC2.Act_id
+JOIN MOVIES M2 ON MC2.Mov_id = M2.Mov_id AND M2.Mov_Year > 2024;
+5. Find the title of movies and number of stars for each movie that has at least one rating
+SELECT M.Mov_Title, R.Rev_Stars
+FROM MOVIES M
+JOIN RATING R ON M.Mov_id = R.Mov_id;
+ 
+38. Consider the DB schema
+Course(course_id, Course_name, credit)
+Instructor(instructor_id, name, phone_no, department,salary)
+Course_offered( Course id Instructor_id Offered_in DBMS Ms.MSK ODD GIT Ms.RT ODD GIT Ms.MMR EVEN JAVA Ms.MVD ODD JAVA Ms.DS EVEN PYTHON Dr.SN ODD DPV Dr.SKV EVEN
+Write an SQL query to
+1)Create the above tables and relate it by properly specifying the primary keys
+CREATE TABLE Course (
+    course_id VARCHAR(10) PRIMARY KEY,
+    course_name VARCHAR(100),
+    credit INT
+);
+CREATE TABLE Instructor (
+    instructor_id VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(100),
+    phone_no VARCHAR(20),
+    department VARCHAR(50) DEFAULT 'AI',
+    salary DECIMAL(10, 2)
+);
+CREATE TABLE Course_offered (
+    course_id VARCHAR(10),
+    instructor_id VARCHAR(10),
+    offered_in VARCHAR(10),
+    PRIMARY KEY (course_id, instructor_id),
+    FOREIGN KEY (course_id) REFERENCES Course(course_id),
+    FOREIGN KEY (instructor_id) REFERENCES Instructor(instructor_id)
+);
+ii) Populate the above tables properly with the suitable records. There should not be any null value. And assume the default department of the instructor is ‘AI’
+INSERT INTO Course (course_id, course_name, credit) VALUES
+('DBMS', 'Database Management Systems', 3),
+('GIT', 'Graphical User Interface Technology', 3),
+('JAVA', 'Java Programming', 3),
+('PYTHON', 'Python Programming', 3),
+('DPV', 'Data Privacy', 2);
+INSERT INTO Instructor (instructor_id, name, phone_no, salary) VALUES
+('Ms.MSK', 'Ms. MSK', '123-456-7890', 60000),
+('Ms.RT', 'Ms. RT', '234-567-8901', 58000),
+('Ms.MMR', 'Ms. MMR', '345-678-9012', 62000),
+('Ms.MVD', 'Ms. MVD', '456-789-0123', 59000),
+('Ms.DS', 'Ms. DS', '567-890-1234', 57000),
+('Dr.SN', 'Dr. SN', '678-901-2345', 65000),
+('Dr.SKV', 'Dr. SKV', '789-012-3456', 63000);
+INSERT INTO Course_offered (course_id, instructor_id, offered_in) VALUES
+('DBMS', 'Ms.MSK', 'ODD'),
+('GIT', 'Ms.RT', 'ODD'),
+('GIT', 'Ms.MMR', 'EVEN'),
+('JAVA', 'Ms.MVD', 'ODD'),
+('JAVA', 'Ms.DS', 'EVEN'),
+('PYTHON', 'Dr.SN', 'ODD'),
+('DPV', 'Dr.SKV', 'EVEN');
+iii) list the course offered in both odd and even semester
+SELECT course_id, course_name, credit
+FROM Course
+WHERE course_id IN (
+    SELECT course_id
+    FROM Course_offered
+    GROUP BY course_id
+    HAVING COUNT(DISTINCT offered_in) = 2
+);
+iv) list the instructor who offer the course in odd semester
+SELECT DISTINCT I.*
+FROM Instructor I
+JOIN Course_offered CO ON I.instructor_id = CO.instructor_id
+WHERE CO.offered_in = 'ODD';
+v) Find the second highest salary of the instructor
+SELECT MAX(salary) AS second_highest_salary
+FROM Instructor
+WHERE salary < (
+    SELECT MAX(salary) FROM Instructor
+);
+ 
+39. Consider the following database of student enrollment in courses and books adopted for that course. STUDENT( regno:string , name:string , major:string, bdate:date )
+ COURSE( courseno:int , cname:string , dept:string )
+ENROLL( regno:string , courseno:int , sem:int , marks:int )
+BOOK_ADOPTION( courseno:int , sem:int , book_isbn:int )
+TEXT( book_isbn:varchar , book_title:string , publisher:string , author:string )
+1)Create the above tables by properly specifying the primary keys and foreign keys.
+CREATE TABLE STUDENT (
+    regno VARCHAR(20) PRIMARY KEY,
+    name VARCHAR(100),
+    major VARCHAR(50),
+    bdate DATE
+);
+CREATE TABLE COURSE (
+    courseno INT PRIMARY KEY,
+    cname VARCHAR(100),
+    dept VARCHAR(50)
+);
+CREATE TABLE ENROLL (
+    regno VARCHAR(20),
+    courseno INT,
+    sem INT,
+    marks INT,
+    PRIMARY KEY (regno, courseno, sem),
+    FOREIGN KEY (regno) REFERENCES STUDENT(regno),
+    FOREIGN KEY (courseno) REFERENCES COURSE(courseno)
+);
+CREATE TABLE BOOK_ADOPTION (
+    courseno INT,
+    sem INT,
+    book_isbn VARCHAR(20),
+    PRIMARY KEY (courseno, sem, book_isbn),
+    FOREIGN KEY (courseno, sem) REFERENCES COURSE(courseno, sem),
+    FOREIGN KEY (book_isbn) REFERENCES TEXT(book_isbn)
+);
+CREATE TABLE TEXT (
+    book_isbn VARCHAR(20) PRIMARY KEY,
+    book_title VARCHAR(200),
+    publisher VARCHAR(100),
+    author VARCHAR(100)
+);
+2) Enter atleast five tuples for each relation.
+INSERT INTO STUDENT (regno, name, major, bdate) VALUES
+('S001', 'John Doe', 'Computer Science', '2000-05-15'),
+('S002', 'Jane Smith', 'Electrical Engineering', '2001-02-28'),
+('S003', 'Alice Brown', 'Mechanical Engineering', '1999-09-10'),
+('S004', 'Bob Johnson', 'Computer Science', '2000-12-20'),
+('S005', 'Eve White', 'Electrical Engineering', '2002-08-05');
+INSERT INTO COURSE (courseno, cname, dept) VALUES
+(101, 'Introduction to AI', 'AI'),
+(102, 'Machine Learning', 'AI'),
+(103, 'Database Systems', 'CS'),
+(104, 'Power Systems', 'EE'),
+(105, 'Fluid Mechanics', 'ME');
+INSERT INTO ENROLL (regno, courseno, sem, marks) VALUES
+('S001', 101, 1, 85),
+('S002', 102, 1, 78),
+('S003', 104, 1, 92),
+('S004', 101, 1, 88),
+('S005', 102, 1, 80);
+INSERT INTO TEXT (book_isbn, book_title, publisher, author) VALUES
+('ISBN000001', 'Artificial Intelligence: A Modern Approach', 'Pearson', 'Stuart Russell, Peter Norvig'),
+('ISBN000002', 'Pattern Recognition and Machine Learning', 'Springer', 'Christopher M. Bishop'),
+('ISBN000003', 'Database Management Systems', 'McGraw-Hill', 'Raghu Ramakrishnan, Johannes Gehrke'),
+('ISBN000004', 'Electric Power Systems', 'McGraw-Hill', 'Weedy, Cory, et al.'),
+('ISBN000005', 'Fluid Mechanics', 'Wiley', 'Frank M. White');
+INSERT INTO BOOK_ADOPTION (courseno, sem, book_isbn) VALUES
+(101, 1, 'ISBN000001'),
+(102, 1, 'ISBN000002'),
+(103, 1, 'ISBN000003'),
+(104, 1, 'ISBN000004'),
+(105, 1, 'ISBN000005');
+3) Demonstrate how you add a new text book to the database and make this book to be adopted by some department.
+INSERT INTO TEXT (book_isbn, book_title, publisher, author) VALUES
+('ISBN000006', 'Deep Learning', 'MIT Press', 'Ian Goodfellow, Yoshua Bengio, Aaron Courville');
+INSERT INTO BOOK_ADOPTION (courseno, sem, book_isbn) VALUES
+(102, 1, 'ISBN000006');
+4) Produce a list of text books (includes courseno , book_isbn , book_title ) in the alphabetical order for courses offered by the 'AI' department that use more than two books.
+SELECT B.courseno, B.book_isbn, T.book_title
+FROM BOOK_ADOPTION B
+JOIN TEXT T ON B.book_isbn = T.book_isbn
+WHERE B.courseno IN (SELECT courseno
+                     FROM COURSE
+                     WHERE dept = 'AI')
+GROUP BY B.courseno, B.book_isbn, T.book_title
+HAVING COUNT(*) > 2
+ORDER BY T.book_title;
+5) Delete the record for the ISBN number “ISBNO0000034”.
+DELETE FROM TEXT
+WHERE book_isbn = 'ISBN0000034';
+ 
+40. Consider the following database schema
+Instructor: ID, Name, Deptname, Salary.
+Course: Courseid, Title, Deptname, Credit.
+Teaches: ID, Courseid, Sec_id, Semester, and Year.
+Write the following queries in SQL
+i) Create the above tables and relate it by properly specifying the primary keys. Salary should be greater than 0.
+CREATE TABLE Instructor (
+    ID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Deptname VARCHAR(100) DEFAULT 'CSE',
+    Salary DECIMAL(10, 2) CHECK (Salary > 0)
+);
+CREATE TABLE Course (
+    Courseid INT PRIMARY KEY,
+    Title VARCHAR(100),
+    Deptname VARCHAR(100) DEFAULT 'CSE',
+    Credit INT
+);
+CREATE TABLE Teaches (
+    ID INT,
+    Courseid INT,
+    Sec_id INT,
+    Semester VARCHAR(20),
+    Year INT,
+    PRIMARY KEY (ID, Courseid, Sec_id, Semester, Year),
+    FOREIGN KEY (ID) REFERENCES Instructor(ID),
+    FOREIGN KEY (Courseid) REFERENCES Course(Courseid)
+);
+ii) Populate the above tables properly with the suitable records. Let the default department name of the student is CSE
+INSERT INTO Instructor (ID, Name, Deptname, Salary) VALUES
+(1, 'John Doe', 'CSE', 60000),
+(2, 'Jane Smith', 'ECE', 65000),
+(3, 'Bob Johnson', 'CSE', 70000),
+(4, 'Alice Brown', 'Mech', 58000),
+(5, 'Eve White', 'CSE', 62000);
+ 
+INSERT INTO Course (Courseid, Title, Deptname, Credit) VALUES
+(101, 'DBMS', 'CSE', 3),
+(102, 'Data Structures', 'CSE', 4),
+(103, 'Digital Electronics', 'ECE', 3),
+(104, 'Thermodynamics', 'Mech', 4),
+(105, 'Operating Systems', 'CSE', 3);
+ 
+INSERT INTO Teaches (ID, Courseid, Sec_id, Semester, Year) VALUES
+(1, 101, 1, 'Spring', 2023),
+(2, 102, 2, 'Fall', 2022),
+(3, 101, 1, 'Fall', 2022),
+(3, 105, 1, 'Spring', 2023),
+(5, 102, 2, 'Spring', 2023);
+iii) Find the average salary of instructors in CSE department
+SELECT AVG(Salary) AS AvgSalary
+FROM Instructor
+WHERE Deptname = 'CSE';
+iv) Find the names of the instructors who teach the course DBMS
+SELECT DISTINCT I.Name
+FROM Instructor I
+JOIN Teaches T ON I.ID = T.ID
+JOIN Course C ON T.Courseid = C.Courseid
+WHERE C.Title = 'DBMS';
+v)Delete all the tables from the database
+DROP TABLE Teaches;
+DROP TABLE Course;
+DROP TABLE Instructor;
+ 
+41. Consider the following database for a banking enterprise.
+BRANCH( branch_name:string , branch_city:string , assets:real )
+ACCOUNT( accno:int, branch_name:string , balance:real )
+DEPOSITOR( customer_name:string , accno:int )
+CUSTOMER( customer_name:string , customer_street:string , customer_city:string )
+LOAN( loan_number:int , branch_name:string , amount:real )
+BORROWER( customer_name:string , loan_number:int )
+i)Create the above tables by properly specifying the primary keys and foreign keys.
+-- Create BRANCH table
+CREATE TABLE BRANCH (
+    branch_name VARCHAR(100),
+    branch_city VARCHAR(100),
+    assets REAL,
+    PRIMARY KEY (branch_name)
+);
+ 
+-- Create ACCOUNT table
+CREATE TABLE ACCOUNT (
+    accno INT,
+    branch_name VARCHAR(100),
+    balance REAL,
+    PRIMARY KEY (accno),
+    FOREIGN KEY (branch_name) REFERENCES BRANCH(branch_name)
+);
+ 
+-- Create DEPOSITOR table
+CREATE TABLE DEPOSITOR (
+    customer_name VARCHAR(100),
+    accno INT,
+    PRIMARY KEY (customer_name, accno),
+    FOREIGN KEY (accno) REFERENCES ACCOUNT(accno)
+);
+ 
+-- Create CUSTOMER table
+CREATE TABLE CUSTOMER (
+    customer_name VARCHAR(100),
+    customer_street VARCHAR(255),
+    customer_city VARCHAR(100),
+    PRIMARY KEY (customer_name)
+);
+ 
+-- Create LOAN table
+CREATE TABLE LOAN (
+    loan_number INT,
+    branch_name VARCHAR(100),
+    amount REAL,
+    PRIMARY KEY (loan_number),
+    FOREIGN KEY (branch_name) REFERENCES BRANCH(branch_name)
+);
+ 
+-- Create BORROWER table
+CREATE TABLE BORROWER (
+    customer_name VARCHAR(100),
+    loan_number INT,
+    PRIMARY KEY (customer_name, loan_number),
+    FOREIGN KEY (customer_name) REFERENCES CUSTOMER(customer_name),
+    FOREIGN KEY (loan_number) REFERENCES LOAN(loan_number)
+);
+ii)Enter at least five tuples for each relation.
+-- Insert into BRANCH table
+INSERT INTO BRANCH (branch_name, branch_city, assets) VALUES
+('Main Branch', 'New York', 500000),
+('Downtown Branch', 'New York', 300000),
+('Uptown Branch', 'New York', 200000),
+('West Branch', 'Los Angeles', 400000),
+('East Branch', 'Los Angeles', 250000);
+ 
+-- Insert into ACCOUNT table
+INSERT INTO ACCOUNT (accno, branch_name, balance) VALUES
+(1, 'Main Branch', 5000),
+(2, 'Main Branch', 7000),
+(3, 'Downtown Branch', 3000),
+(4, 'Uptown Branch', 4000),
+(5, 'West Branch', 6000);
+ 
+-- Insert into DEPOSITOR table
+INSERT INTO DEPOSITOR (customer_name, accno) VALUES
+('John Doe', 1),
+('Jane Smith', 2),
+('John Doe', 3),
+('Alice Brown', 4),
+('Bob Johnson', 5);
+ 
+-- Insert into CUSTOMER table
+INSERT INTO CUSTOMER (customer_name, customer_street, customer_city) VALUES
+('John Doe', '123 Main St', 'New York'),
+('Jane Smith', '456 Elm St', 'New York'),
+('Alice Brown', '789 Oak St', 'Los Angeles'),
+('Bob Johnson', '101 Pine St', 'Los Angeles'),
+('Eve White', '222 Maple St', 'New York');
+ 
+-- Insert into LOAN table
+INSERT INTO LOAN (loan_number, branch_name, amount) VALUES
+(101, 'Main Branch', 10000),
+(102, 'Main Branch', 15000),
+(103, 'Downtown Branch', 8000),
+(104, 'West Branch', 12000),
+(105, 'East Branch', 9000);
+ 
+-- Insert into BORROWER table
+INSERT INTO BORROWER (customer_name, loan_number) VALUES
+('John Doe', 101),
+('Jane Smith', 102),
+('Alice Brown', 104),
+('Bob Johnson', 105),
+('Eve White', 103);
+iii)Find all the customers who have at least two accounts at the main branch.
+SELECT DISTINCT d1.customer_name
+FROM DEPOSITOR d1, DEPOSITOR d2, ACCOUNT a1, ACCOUNT a2
+WHERE d1.accno = a1.accno AND d1.branch_name = 'Main Branch'
+    AND d2.accno = a2.accno AND d2.branch_name = 'Main Branch'
+    AND d1.customer_name = d2.customer_name
+    AND d1.accno <> d2.accno;
+iv)Find all the customers who have an account at all the branches located in a specific city.
+SELECT DISTINCT d.customer_name
+FROM DEPOSITOR d, ACCOUNT a, BRANCH b
+WHERE d.accno = a.accno
+    AND a.branch_name = b.branch_name
+    AND b.branch_city = 'New York'
+GROUP BY d.customer_name
+HAVING COUNT(DISTINCT b.branch_name) = (SELECT COUNT(DISTINCT branch_name) FROM BRANCH WHERE branch_city = 'New York');
+v)Delete all account tuples at every branch located in a specific city.
+DELETE FROM ACCOUNT
+WHERE branch_name IN (SELECT branch_name FROM BRANCH WHERE branch_city = 'Los Angeles');
+ 
+42. Create the following tables and write the query for the given statements below Student(ID,NAME,DOB) Staff(ID,NAME,DEPARTMENT) Subject(COURSE_CODE,COURSE_NAME)
+-- Create Student_Info table
+CREATE TABLE Student_Info (
+    ID INT PRIMARY KEY,
+    NAME VARCHAR(100),
+    DOB DATE
+);
+ 
+-- Create Staff table
+CREATE TABLE Staff (
+    ID INT PRIMARY KEY,
+    NAME VARCHAR(100),
+    DEPARTMENT VARCHAR(100)
+);
+ 
+-- Create Subject table
+CREATE TABLE Subject (
+    COURSE_CODE VARCHAR(10) PRIMARY KEY,
+    COURSE_NAME VARCHAR(100)
+);
+i) rename the Student table to Student_Info
+ALTER TABLE Student RENAME TO Student_Info;
+ ii) Add DOJ to Student_Info table
+ALTER TABLE Student_Info ADD COLUMN DOJ DATE;
+iii) update the staff name to Anu”whose id is 103
+UPDATE Staff SET NAME = 'Anu' WHERE ID = 103;
+alter the subject table by changing the attribute COURSE_CODE to COURSE_ID
+ALTER TABLE Subject CHANGE COURSE_CODE COURSE_ID VARCHAR(10);
+v)delete all the records of Student_Info table
+DELETE FROM Student_Info;
+ 
+43. Create the following tables and write the query for the given statements below Employee(ID,NAME,DOJ)
+Branch(ID,NAME)
+Bank(NAME,ACCOUNT_NO,IFSC_CODE)
+CREATE TABLE Employee (
+    ID INT PRIMARY KEY,
+    NAME VARCHAR(100),
+    DOJ DATE
+);
+ 
+CREATE TABLE Branch (
+    ID INT PRIMARY KEY,
+    NAME VARCHAR(100)
+);
+ 
+CREATE TABLE Bank (
+    NAME VARCHAR(100),
+    ACCOUNT_NO VARCHAR(50),
+    IFSC_CODE VARCHAR(20),
+    PRIMARY KEY (NAME, ACCOUNT_NO)
+);
+ 
+i) rename the Employee table to Emp_details
+               ALTER TABLE Employee RENAME TO Emp_details;
+ii) Add SALARY to Emp_details table
+ALTER TABLE Emp_details ADD COLUMN SALARY DECIMAL(10, 2);
+iii) describe the structure of Bank table
+DESCRIBE Bank;
+SHOW COLUMNS FROM Bank;
+iv) Alter the Branch table by changing the attribute NAME to BRANCH_NAME:
+ALTER TABLE Branch CHANGE NAME BRANCH_NAME VARCHAR(100);
+ 
+44. Consider the following relational database schemas:
+Passenger(pid, pname, pgender, pcity)
+Agency(aid, aname, acity) Booking(pid,aid,fid,fdate)
+Flight(fid, fdate, time, src, dest)
+ Answer the following questions using relational algebra queries:
+Get the complete details of all flights to New Delhi
+π_fid, fdate, time, src, dest(σ_dest='New Delhi'(Flight))
+ii) Find the passengers name who bookd flight on 15-aug-2023
+π_pname (Passenger ⨝ Booking ⨝ σ_fdate='2023-08-15'(Flight))
+iv) Get the details about all flights from Chennai to Mumbai
+π_fid, fdate, time, src, dest(σ_src='Chennai' ∧ dest='Mumbai'(Flight))
+v) Update the passenger name to Ärun”whose id is 102.
+Passenger := Passenger - σ_pid=102(Passenger) ∪ (π_pid=102, 'Arun', pgender, pcity(Passenger))
+vi) Delete all the records whose destination is “Chennai
+Flight := Flight - σ_dest='Chennai'(Flight)
+ 
+ 
+45. Create the following tables and write the query for the given statements below Employee(ID,NAME,DOJ)
+Branch(ID,NAME)
+Bank(NAME,ACCOUNT_NO,IFSC_CODE)
+i) rename the Employee table to Emp_details
+ALTER TABLE Employee RENAME TO Emp_details;
+ii) Add SALARY to Emp_details table
+ALTER TABLE Emp_details ADD COLUMN SALARY DECIMAL(10, 2);
+iii) describe the structure of Bank table
+DESCRIBE Bank;
+SHOW COLUMNS FROM Bank;
+iv)alter the Branch table by changing the attribute NAME to BRANCH_NAME
+ALTER TABLE Branch CHANGE NAME BRANCH_NAME VARCHAR(100);
+v)delete all the records of Branch table, Emp_details, Branch and Bank table
+DELETE FROM Branch;
+DELETE FROM Emp_details;
+DELETE FROM Bank;
+46. Consider the following database schema
+Customer: CustomerID, Customer Name, Contact Name, Address, City , Postal Code , Country Order: OrderID, CustomerID , EmployeeID , OrderDate , ShipperID, Amount.
+ Write the following queries in SQL
+i) Create the above tables and relate it by properly specifying the primary keys and ShipperID should be unique
+-- Creating Customer table
+CREATE TABLE Customer (
+    CustomerID INT PRIMARY KEY,
+    CustomerName VARCHAR(100) NOT NULL,
+    ContactName VARCHAR(100),
+    Address VARCHAR(255),
+    City VARCHAR(100),
+    PostalCode VARCHAR(20),
+    Country VARCHAR(100)
+);
+ 
+-- Creating Order table
+CREATE TABLE Order (
+    OrderID INT PRIMARY KEY,
+    CustomerID INT,
+    EmployeeID INT,
+    OrderDate DATE,
+    ShipperID INT UNIQUE,
+    Amount DECIMAL(10, 2),
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
+);
+ii) Populate the above tables properly with the suitable records. There should not be any null value.
+-- Inserting values into Customer table
+INSERT INTO Customer (CustomerID, CustomerName, ContactName, Address, City, PostalCode, Country)
+VALUES (1, 'Customer A', 'John Doe', '123 Main St', 'New York', '10001', 'USA'),
+       (2, 'Customer B', 'Jane Smith', '456 Elm St', 'Los Angeles', '90001', 'USA'),
+       (3, 'Customer C', 'Alice Johnson', '789 Oak St', 'Chicago', '60601', 'USA');
+ 
+-- Inserting values into Order table
+INSERT INTO Order (OrderID, CustomerID, EmployeeID, OrderDate, ShipperID, Amount)
+VALUES (101, 1, 101, '2024-07-01', 201, 500.00),
+       (102, 2, 102, '2024-07-02', 202, 750.00),
+       (103, 1, 103, '2024-07-03', 203, 1000.00);
+iii) Find the names of all Customer whose Customer name is end with J
+SELECT CustomerName
+FROM Customer
+WHERE CustomerName LIKE '%J';
+iv) Find the address of customer who has not order placed
+SELECT Address
+FROM Customer
+WHERE CustomerID NOT IN (
+    SELECT CustomerID
+    FROM Order
+);
+v) Delete all the tables from the database
+DELETE FROM Order;
+DELETE FROM Customer;
+ 
+ 
+47. ) Consider the following database schema
+Supplier(sid,sname,address)
+Product(pid, pname, unit_cost , qty, sid)
+Order(oid,odate,sid)
+Order_product(oid, pid,qty)
+ Write the following queries in SQL
+i) Create the above tables and relate it by properly specifying the primary keys and Unit_cost and qty should be greater than 0.
+-- Creating Supplier table
+CREATE TABLE Supplier (
+    sid VARCHAR(10) PRIMARY KEY,
+    sname VARCHAR(100),
+    address VARCHAR(255) DEFAULT 'Erode'
+);
+ 
+-- Creating Product table with unit_cost and qty greater than 0 constraint
+CREATE TABLE Product (
+    pid VARCHAR(10) PRIMARY KEY,
+    pname VARCHAR(100),
+    unit_cost DECIMAL(10, 2) CHECK (unit_cost > 0),
+    qty INT CHECK (qty > 0),
+    sid VARCHAR(10),
+    FOREIGN KEY (sid) REFERENCES Supplier(sid)
+);
+ 
+-- Creating Order table
+CREATE TABLE Order (
+    oid VARCHAR(10) PRIMARY KEY,
+    odate DATE,
+    sid VARCHAR(10),
+    FOREIGN KEY (sid) REFERENCES Supplier(sid)
+);
+ 
+-- Creating Order_product table with qty greater than 0 constraint
+CREATE TABLE Order_product (
+    oid VARCHAR(10),
+    pid VARCHAR(10),
+    qty INT CHECK (qty > 0),
+    PRIMARY KEY (oid, pid),
+    FOREIGN KEY (oid) REFERENCES Order(oid),
+    FOREIGN KEY (pid) REFERENCES Product(pid)
+);
+ii) Populate the above tables properly with the suitable records. Let the default address of supplier is ‘Erode’.
+-- Inserting values into Supplier table
+INSERT INTO Supplier (sid, sname)
+VALUES ('S123', 'Supplier A'),
+       ('S456', 'Supplier B');
+ 
+-- Inserting values into Product table
+INSERT INTO Product (pid, pname, unit_cost, qty, sid)
+VALUES ('P001', 'Product 1', 10.50, 100, 'S123'),
+       ('P002', 'Product 2', 15.75, 50, 'S456');
+ 
+-- Inserting values into Order table
+INSERT INTO Order (oid, odate, sid)
+VALUES ('Or4567', '2024-07-01', 'S123'),
+       ('Or8901', '2024-07-02', 'S456');
+ 
+-- Inserting values into Order_product table
+INSERT INTO Order_product (oid, pid, qty)
+VALUES ('Or4567', 'P001', 20),
+       ('Or4567', 'P002', 10),
+       ('Or8901', 'P002', 5);
+iii) Find the total amount of orders supplied by the supplier id=S123.
+SELECT o.oid, SUM(op.qty * p.unit_cost) AS total_amount
+FROM Order o
+JOIN Order_product op ON o.oid = op.oid
+JOIN Product p ON op.pid = p.pid
+WHERE o.sid = 'S123'
+GROUP BY o.oid;
+iv) Display the supplier name, product name, qty ordered, unit cost, total amount for the order id ‘Or4567’.
+SELECT s.sname AS supplier_name, pr.pname AS product_name, op.qty AS qty_ordered,
+       pr.unit_cost, op.qty * pr.unit_cost AS total_amount
+FROM Supplier s
+JOIN Product pr ON s.sid = pr.sid
+JOIN Order_product op ON pr.pid = op.pid
+WHERE op.oid = 'Or4567';
+v) Delete all the tables from the database.
+DELETE FROM Order_product;
+DELETE FROM Order;
+DELETE FROM Product;
+DELETE FROM Supplier;
+ 
+48. Consider the following database schema
+ Suppliers(sid: integer, sname: string, address: string)
+Parts(pid: integer, pname: string, color: string)
+Catalog(sid: integer, pid: integer, cost: real)
+Write SQL statement to
+i) Create the above tables and relate it by properly specifying the primary keys and Cost of the product should be greater than 0.
+-- Creating Suppliers table
+CREATE TABLE Suppliers (
+    sid INTEGER PRIMARY KEY,
+    sname VARCHAR(100),
+    address VARCHAR(255),
+    mobile_number VARCHAR(20) -- Added mobile number column
+);
+ 
+-- Creating Parts table
+CREATE TABLE Parts (
+    pid INTEGER PRIMARY KEY,
+    pname VARCHAR(100),
+    color VARCHAR(50)
+);
+ 
+-- Creating Catalog table with cost greater than 0 constraint
+CREATE TABLE Catalog (
+    sid INTEGER,
+    pid INTEGER,
+    cost REAL CHECK (cost > 0),
+    PRIMARY KEY (sid, pid),
+    FOREIGN KEY (sid) REFERENCES Suppliers(sid),
+    FOREIGN KEY (pid) REFERENCES Parts(pid)
+);
+ii) add the mobile number to the supplier
+ALTER TABLE Suppliers
+ADD COLUMN mobile_number VARCHAR(20);
+iii) Find the sids of suppliers who supply only red parts
+SELECT DISTINCT sid
+FROM Catalog
+JOIN Parts ON Catalog.pid = Parts.pid
+WHERE Parts.color = 'red'
+AND NOT EXISTS (
+    SELECT *
+    FROM Catalog C2
+    JOIN Parts P2 ON C2.pid = P2.pid
+    WHERE C2.sid = Catalog.sid
+    AND P2.color <> 'red'
+);
+iv) Find the sids of suppliers who charge more for some part than the average cost ofthat part (averaged over all the suppliers who supply that part).
+SELECT DISTINCT C1.sid
+FROM Catalog C1
+WHERE C1.cost > (
+    SELECT AVG(C2.cost)
+    FROM Catalog C2
+    WHERE C2.pid = C1.pid
+);
+v) Delete all the records from the tables.
+DELETE FROM Catalog;
+DELETE FROM Parts;
+DELETE FROM Suppliers;
+ 
+ 
+49. ) Consider the following database schema
+Person (driver-id, name, address)
+Car (license, model, year)
+Owns (driver-id, license, name)
+Accident (report-number, date, location)
+Participated (driver-id, car, report-number, damage-amount)
+Write the following queries in SQL
+i) Create the above tables and relate it by properly specifying the primary keys and Default Model of the car is TATA.
+-- Creating Person table
+CREATE TABLE Person (
+    driver_id INT PRIMARY KEY,
+    name VARCHAR(100),
+    address VARCHAR(255)
+);
+ 
+-- Creating Car table with default model as TATA
+CREATE TABLE Car (
+    license VARCHAR(20) PRIMARY KEY,
+    model VARCHAR(50) DEFAULT 'TATA',
+    year INT
+);
+ 
+-- Creating Owns table with foreign keys
+CREATE TABLE Owns (
+    driver_id INT,
+    license VARCHAR(20),
+    name VARCHAR(100),
+    PRIMARY KEY (driver_id, license),
+    FOREIGN KEY (driver_id) REFERENCES Person(driver_id),
+    FOREIGN KEY (license) REFERENCES Car(license)
+);
+ 
+-- Creating Accident table
+CREATE TABLE Accident (
+    report_number INT PRIMARY KEY,
+    date DATE,
+    location VARCHAR(100)
+);
+ 
+-- Creating Participated table with damage-amount constraint
+CREATE TABLE Participated (
+    driver_id INT,
+    car VARCHAR(20),
+    report_number INT,
+    damage_amount DECIMAL(10, 2) CHECK (damage_amount >= 0),
+    PRIMARY KEY (driver_id, car, report_number),
+    FOREIGN KEY (driver_id) REFERENCES Person(driver_id),
+    FOREIGN KEY (car) REFERENCES Car(license),
+    FOREIGN KEY (report_number) REFERENCES Accident(report_number)
+);
+ii) Set the criteria ‘damage-amount should not be less than 0’. Populate the above tables properly with the suitable records
+-- Inserting values into Person table
+INSERT INTO Person (driver_id, name, address)
+VALUES (1, 'John Doe', '123 Main St'),
+       (2, 'Jane Smith', '456 Elm St');
+ 
+-- Inserting values into Car table
+INSERT INTO Car (license, year)
+VALUES ('ABC123', 2018),
+       ('XYZ789', 2020);
+ 
+-- Inserting values into Owns table
+INSERT INTO Owns (driver_id, license, name)
+VALUES (1, 'ABC123', 'John Doe'),
+       (2, 'XYZ789', 'Jane Smith');
+ 
+-- Inserting values into Accident table
+INSERT INTO Accident (report_number, date, location)
+VALUES (1, '2024-01-01', 'Intersection of Elm and Oak'),
+       (2, '2024-02-15', 'Highway 101');
+ 
+-- Inserting values into Participated table
+INSERT INTO Participated (driver_id, car, report_number, damage_amount)
+VALUES (1, 'ABC123', 1, 500.00),
+       (2, 'XYZ789', 2, 1000.00);
+iii) Find the car model and driver-id of the owner who had licensed.
+SELECT Car.model, Owns.driver_id
+FROM Car
+JOIN Owns ON Car.license = Owns.license;
+iv) Increase the damage-amount of each participated in the SUZUKI car by 10 percent
+UPDATE Participated
+SET damage_amount = damage_amount * 1.1
+WHERE car = 'SUZUKI';
+v) Delete all the tables from the database.
+DROP TABLE Participated;
+DROP TABLE Accident;
+DROP TABLE Owns;
+DROP TABLE Car;
+DROP TABLE Person;
+ 
+50. Consider the following database consisting of the following tables:
+Inventory (item, level, cost)
+ Minlevel (item, level)
+ Reorder (item, quantity)
+Purchase (item, quantity, cost, customer name, date_of_purchase)
+i) Create the above tables and relate it by properly specifying the primary keys and insert the records.
+-- Creating Inventory table
+CREATE TABLE Inventory (
+    item VARCHAR(50) PRIMARY KEY,
+    level INT,
+    cost DECIMAL(10, 2)
+);
+ 
+-- Creating Minlevel table
+CREATE TABLE Minlevel (
+    item VARCHAR(50) PRIMARY KEY,
+    level INT,
+    FOREIGN KEY (item) REFERENCES Inventory(item)
+);
+ 
+-- Creating Reorder table
+CREATE TABLE Reorder (
+    item VARCHAR(50),
+    quantity INT,
+    PRIMARY KEY (item),
+    FOREIGN KEY (item) REFERENCES Inventory(item)
+);
+ 
+-- Creating Purchase table
+CREATE TABLE Purchase (
+    item VARCHAR(50),
+    quantity INT,
+    cost DECIMAL(10, 2),
+    customer_name VARCHAR(100),
+    date_of_purchase DATE,
+    PRIMARY KEY (item, date_of_purchase),
+    FOREIGN KEY (item) REFERENCES Inventory(item)
+);
+ 
+-- Inserting values into Inventory table
+INSERT INTO Inventory (item, level, cost)
+VALUES ('Chair', 50, 25.00),
+       ('Table', 30, 50.00),
+       ('Desk', 20, 100.00);
+ 
+-- Inserting values into Minlevel table
+INSERT INTO Minlevel (item, level)
+VALUES ('Chair', 10),
+       ('Table', 15),
+       ('Desk', 8);
+ 
+-- Inserting values into Reorder table
+INSERT INTO Reorder (item, quantity)
+VALUES ('Chair', 20),
+       ('Table', 10),
+       ('Desk', 5);
+ 
+-- Inserting values into Purchase table
+INSERT INTO Purchase (item, quantity, cost, customer_name, date_of_purchase)
+VALUES ('Chair', 5, 30.00, 'ABC Furniture', '2024-07-01'),
+       ('Table', 2, 60.00, 'XYZ Company', '2024-07-02'),
+       ('Desk', 1, 110.00, 'PQR Office Supplies', '2024-07-01');
+ii) Set the criteria ”cost of Inventory not less than 0”.
+ALTER TABLE Inventory
+ADD CONSTRAINT chk_cost CHECK (cost >= 0);
+ 
+iii) Display the number of customers for the shop on a particular day.
+ 
+SELECT date_of_purchase, COUNT(DISTINCT customer_name) AS num_customers
+FROM Purchase
+WHERE date_of_purchase = '2024-07-01';
+iv) Write a query to display the item purchased by a given customer name.
+SELECT item, quantity, cost, date_of_purchase
+FROM Purchase
+WHERE customer_name = 'ABC Furniture';
+v) Update the quantity of the item.
+UPDATE Inventory
+SET level = level + <new_quantity>
+WHERE item = '<item_name>';
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
